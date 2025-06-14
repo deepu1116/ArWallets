@@ -1,0 +1,276 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ARWallet</title>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #fff0f0;
+      color: #333;
+    }
+    header {
+      background: #ff4d4d;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+    }
+    header .logo {
+      font-weight: bold;
+      font-size: 1.4rem;
+    }
+    .top-nav a {
+      margin-left: 1rem;
+      color: white;
+      text-decoration: none;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    main {
+      padding: 1rem;
+      max-width: 480px;
+      margin: auto;
+    }
+    .center-buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 2rem;
+    }
+    .circle-button {
+      background: #ff4d4d;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      font-size: 1.2rem;
+      margin: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      cursor: pointer;
+    }
+    .graphic-placeholder {
+      width: 100%;
+      height: 100px;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Simple_red_circle.svg/2048px-Simple_red_circle.svg.png') no-repeat center;
+      background-size: contain;
+      margin-bottom: 1rem;
+    }
+    .hidden {
+      display: none;
+    }
+    .back-btn {
+      background: #ccc;
+      border: none;
+      padding: 0.5rem 1rem;
+      margin: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .page {
+      display: none;
+    }
+    .page.active {
+      display: block;
+    }
+    .balance-display {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-top: 1rem;
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 0.5rem;
+      text-align: left;
+      border-bottom: 1px solid #ccc;
+    }
+    .withdraw-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .withdraw-btn {
+      background: #fff;
+      border: 2px solid #ff4d4d;
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      flex: 1 1 calc(50% - 1rem);
+      text-align: center;
+      position: relative;
+      cursor: pointer;
+    }
+    .withdraw-btn:hover {
+      background: #ffe5e5;
+    }
+    .info-btn {
+      font-size: 0.9rem;
+      color: #999;
+      position: absolute;
+      top: 4px;
+      right: 8px;
+      cursor: pointer;
+    }
+    .login-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding: 1rem;
+      background: #fff5f5;
+    }
+    .login-container input {
+      padding: 0.75rem;
+      margin: 0.5rem 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 80%;
+      max-width: 300px;
+      font-size: 1rem;
+    }
+    .login-container button {
+      background: #ff4d4d;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      width: 80%;
+      max-width: 300px;
+    }
+    .login-error {
+      color: red;
+      margin-top: 1rem;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container" id="loginContainer">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Mobile Number"/>
+    <input type="password" id="password" placeholder="Password"/>
+    <button onclick="checkLogin()">Login</button>
+    <div class="login-error" id="loginError"></div>
+  </div> <div id="app" class="hidden">
+    <header>
+      <div class="logo">ARWallet</div>
+      <div class="top-nav">
+        <a onclick="showPage('home')">Home</a>
+        <a onclick="showPage('balance')">Balance</a>
+        <a onclick="showPage('history')">Transaction History</a>
+        <a onclick="showPage('about')">About Us</a>
+        <a onclick="showPage('support')">Customer Service</a>
+      </div>
+    </header><main>
+  <div id="home" class="page active">
+    <div class="graphic-placeholder"></div>
+    <div class="center-buttons">
+      <button class="circle-button" onclick="showPage('buy')">Buy ARB</button>
+      <button class="circle-button" onclick="showPage('sell')">Sell ARB</button>
+    </div>
+  </div>
+
+  <div id="balance" class="page">
+    <button class="back-btn" onclick="showPage('home')">Back</button>
+    <div class="balance-display">Total Balance: ₹13,43,300.00</div>
+  </div>
+
+  <div id="history" class="page">
+    <button class="back-btn" onclick="showPage('home')">Back</button>
+    <table>
+      <thead>
+        <tr><th>Date</th><th>Amount</th><th>Source/Destination</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>2 Nov 2024</td><td>₹100</td><td>Reward</td></tr>
+        <tr><td>4 Nov 2024</td><td>-₹100</td><td>UPI Withdrawal</td></tr>
+        <tr><td>31 May 2025</td><td>₹2,00,000</td><td>Deposit</td></tr>
+        <tr><td>1 Jun 2025</td><td>₹2,00,000</td><td>Deposit</td></tr>
+        <tr><td>1 Jun 2025</td><td>₹95,300</td><td>Deposit</td></tr>
+        <tr><td>2 Jun 2025</td><td>₹2,00,000</td><td>Deposit</td></tr>
+        <tr><td>3 Jun 2025</td><td>₹2,00,000</td><td>Deposit</td></tr>
+        <tr><td>4 Jun 2025</td><td>₹2,00,000</td><td>Deposit</td></tr>
+        <tr><td>4 Jun 2025</td><td>₹100</td><td>Reward</td></tr>
+        <tr><td>7 Jun 2025</td><td>-₹100</td><td>Bank Transfer</td></tr>
+        <tr><td>11 Jun 2025</td><td>₹2,00,000</td><td>Wallet Transfer</td></tr>
+        <tr><td>12 Jun 2025</td><td>₹48,000</td><td>Deposit</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="about" class="page">
+    <button class="back-btn" onclick="showPage('home')">Back</button>
+    <p>ARWallet is a secure platform for managing your ARB credits and withdrawals conveniently. Enjoy seamless transactions 24/7!</p>
+  </div>
+
+  <div id="support" class="page">
+    <button class="back-btn" onclick="showPage('home')">Back</button>
+    <p>Customer service agents are being newly employed. Please wait a few days.</p>
+  </div>
+
+  <div id="buy" class="page">
+    <button class="back-btn" onclick="showPage('home')">Back</button>
+    <p>Enter amount to deposit in ARB:</p>
+    <input type="number" placeholder="Amount in ₹" style="padding:0.5rem; width:100%; max-width:300px;" />
+    <button style="margin-top:1rem;">Deposit</button>
+  </div>
+
+  <div id="sell" class="page">
+    <button class="back-btn" onclick="showPage('home')">Back</button>
+    <p>Select withdrawal option:</p>
+    <div class="withdraw-options">
+      <div class="withdraw-btn" onclick="confirmWithdraw('₹7,500')">₹7,500</div>
+      <div class="withdraw-btn" onclick="confirmWithdraw('₹15,00,000')">₹15,00,000 <span class="info-btn" onclick="event.stopPropagation(); alert('₹2,00,000/day for 7 days, ₹1,00,000 on 8th day')">ℹ️</span></div>
+      <div class="withdraw-btn" onclick="confirmWithdraw('₹25,00,000')">₹25,00,000 <span class="info-btn" onclick="event.stopPropagation(); alert('₹2,00,000/day for 12 days, ₹1,00,000 on 13th day')">ℹ️</span></div>
+      <div class="withdraw-btn" onclick="confirmWithdraw('₹35,00,000')">₹35,00,000 <span class="info-btn" onclick="event.stopPropagation(); alert('₹2,00,000/day for 17 days, ₹1,00,000 on 18th day')">ℹ️</span></div>
+      <div class="withdraw-btn" onclick="confirmWithdraw('₹50,00,000')">₹50,00,000 <span class="info-btn" onclick="event.stopPropagation(); alert('₹2,00,000/day for 24 days, ₹2,00,000 on 25th day')">ℹ️</span></div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  &copy; 2025 ARWallet. All rights reserved.
+</footer>
+
+  </div> <script>
+    const username = "7981920793";
+    const password = "Chinnu793";
+
+    function checkLogin() {
+      const inputUser = document.getElementById("username").value;
+      const inputPass = document.getElementById("password").value;
+      if (inputUser === username && inputPass === password) {
+        document.getElementById("loginContainer").style.display = "none";
+        document.getElementById("app").classList.remove("hidden");
+        showPage('home');
+      } else {
+        document.getElementById("loginError").innerText = "User not found";
+      }
+    }
+
+    function showPage(pageId) {
+      const pages = document.querySelectorAll(".page");
+      pages.forEach(page => page.classList.remove("active"));
+      document.getElementById(pageId).classList.add("active");
+    }
+
+    function confirmWithdraw(amount) {
+      if (confirm(`Confirm to withdraw ${amount}?`)) {
+        alert("Withdrawal request submitted successfully.");
+      }
+    }
+  </script></body>
+</html>
